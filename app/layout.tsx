@@ -13,8 +13,9 @@ const fontSans = FontSans({
 })
 
 export const metadata: Metadata = {
-  title: 'LiveDocs',
-  description: 'Your go-to collaborative editor',
+  title: 'Kira Live Docs',
+  description: 'A powerful collaborative editing tool',
+  icons:"/favicon.png"
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -29,6 +30,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       }}
     >
       <html lang="en" suppressHydrationWarning>
+        <head>
+          <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+        </head>
         <body
           className={cn(
             "min-h-screen font-sans antialiased",
