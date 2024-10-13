@@ -65,7 +65,6 @@ export function Editor({ roomId, currentUserType }: { roomId: string, currentUse
               <AutoFocusPlugin />
             </div>
           )}
-
           <LiveblocksPlugin>
             <FloatingComposer className="w-[350px]" />
             <FloatingThreads threads={threads} />

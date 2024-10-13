@@ -7,7 +7,10 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-
+ @tailwind base;
+ @tailwind components;
+ @tailwind utilities;
+ 
 body {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular',
@@ -57,7 +60,7 @@ body {
 }
 
 .editor-inner {
-  background: #0b1527;
+  @apply bg-white dark:bg-dark-300;
   position: relative;
 }
 
@@ -71,7 +74,7 @@ body {
   outline: 0;
   padding: 40px;
   caret-color: #444;
-  color: #b4c6ee;
+ @apply text-black dark:text-white;
 }
 
 .editor-placeholder {
@@ -319,7 +322,7 @@ pre::-webkit-scrollbar-thumb {
 .toolbar {
   display: flex;
   margin-bottom: 1px;
-  background: #09111f;
+
   padding: 4px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -345,6 +348,7 @@ pre::-webkit-scrollbar-thumb {
 }
 
 .toolbar button.toolbar-item i.format {
+ 
   background-size: contain;
   display: inline-block;
   height: 18px;
@@ -368,12 +372,12 @@ pre::-webkit-scrollbar-thumb {
 }
 
 .toolbar .toolbar-item:hover:not([disabled]) {
-  background-color: #0f1c34;
+@apply bg-dark-500;
 }
 
 .toolbar .divider {
   width: 1px;
-  background-color: #0f1c34;
+ 
   margin: 0 4px;
 }
 
