@@ -14,7 +14,7 @@ const Header = ({ children, className }: HeaderProps) => {
                       height={32}
                       className="p-2"
                   />
-                  <h1 className='md:flex hidden items-center text-center text-2xl font-bold mr-3'>Kira&nbsp; <span className='text-cyan-400'>LiveDocs</span></h1>
+                  <h1 className='md:flex hidden text-black dark:text-white items-center text-center text-2xl font-bold mr-3'>Kira&nbsp; <span className='text-cyan-400'>LiveDocs</span></h1>
               </div>
           </Link>
           {children}

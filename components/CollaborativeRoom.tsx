@@ -1,5 +1,4 @@
-'use client';
-
+"use client"
 import { ClientSideSuspense, RoomProvider } from '@liveblocks/react/suspense'
 import { Editor } from '@/components/editor/Editor'
 import Header from '@/components/Header'
@@ -11,8 +10,10 @@ import Image from 'next/image';
 import { updateDocument } from '@/lib/actions/room.actions';
 import Loader from './Loader';
 import ShareModal from './ShareModal';
+import DarkLightMode from './DarkLightMode/DarkLightMode';
 
 const CollaborativeRoom = ({ roomId, roomMetadata, users, currentUserType }: CollaborativeRoomProps) => {
+
   const [documentTitle, setDocumentTitle] = useState(roomMetadata.title);
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -21,14 +22,14 @@ const CollaborativeRoom = ({ roomId, roomMetadata, users, currentUserType }: Col
   const inputRef = useRef<HTMLDivElement>(null);
 
   const updateTitleHandler = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if(e.key === 'Enter') {
+    if (e.key === 'Enter') {
       setLoading(true);
 
       try {
-        if(documentTitle !== roomMetadata.title) {
+        if (documentTitle !== roomMetadata.title) {
           const updatedDocument = await updateDocument(roomId, documentTitle);
-          
-          if(updatedDocument) {
+
+          if (updatedDocument) {
             setEditing(false);
           }
         }
@@ -42,7 +43,7 @@ const CollaborativeRoom = ({ roomId, roomMetadata, users, currentUserType }: Col
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if(containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setEditing(false);
         updateDocument(roomId, documentTitle);
       }
@@ -56,75 +57,103 @@ const CollaborativeRoom = ({ roomId, roomMetadata, users, currentUserType }: Col
   }, [roomId, documentTitle])
 
   useEffect(() => {
-    if(editing && inputRef.current) {
+    if (editing && inputRef.current) {
       inputRef.current.focus();
     }
   }, [editing])
-  
+
+  // Fungsi untuk mengambil mode awal dari localStorage
+  const getInitialTheme = () => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme');
+      return savedTheme === 'dark';
+    }
+    return true; // Default dark mode
+  };
+
+  const [isDark, setIsDark] = useState<boolean>(getInitialTheme);
+
+  // Simpan perubahan mode ke localStorage
+  const toggleButton = () => {
+    setIsDark(!isDark);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('theme', !isDark ? 'dark' : 'light');
+    }
+  };
+
+  useEffect(() => {
+    // Saat pertama kali halaman dimuat, terapkan mode yang tersimpan di localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setIsDark(savedTheme === 'dark');
+    }
+  }, []);
 
   return (
     <RoomProvider id={roomId}>
       <ClientSideSuspense fallback={<Loader />}>
-        <div className="collaborative-room">
-          <Header>
-            <div ref={containerRef} className="flex w-fit items-center justify-center gap-2">
-              {editing && !loading ? (
-                <Input 
-                  type="text"
-                  value={documentTitle}
-                  ref={inputRef}
-                  placeholder="Enter title"
-                  onChange={(e) => setDocumentTitle(e.target.value)}
-                  onKeyDown={updateTitleHandler}
-                  disable={!editing}
-                  className="document-title-input"
+        <div className={`${isDark && "dark"}`}>
+          <div className="collaborative-room bg-gray-200 dark:bg-transparent">
+            <Header>
+              <div ref={containerRef} className="flex w-fit items-center justify-center gap-2">
+                {editing && !loading ? (
+                  <Input
+                    type="text"
+                    value={documentTitle}
+                    ref={inputRef}
+                    placeholder="Enter title"
+                    onChange={(e) => setDocumentTitle(e.target.value)}
+                    onKeyDown={updateTitleHandler}
+                    disable={!editing}
+                    className="document-title-input"
+                  />
+                ) : (
+                  <>
+                    <p className="document-title">{documentTitle}</p>
+                  </>
+                )}
+
+                {currentUserType === 'editor' && !editing && (
+                  <Image
+                    src="/assets/icons/edit.svg"
+                    alt="edit"
+                    width={24}
+                    height={24}
+                    onClick={() => setEditing(true)}
+                    className="pointer"
+                  />
+                )}
+
+                {currentUserType !== 'editor' && !editing && (
+                  <p className="view-only-tag">View only</p>
+                )}
+
+                {loading && <p className="text-sm text-gray-400">saving...</p>}
+              </div>
+              <div className="flex w-full flex-1 justify-end gap-2 sm:gap-3">
+                <ActiveCollaborators />
+                <DarkLightMode toggleButton={toggleButton} isDark={isDark} />
+                <ShareModal
+                  roomId={roomId}
+                  collaborators={users}
+                  creatorId={roomMetadata.creatorId}
+                  currentUserType={currentUserType}
                 />
-              ) : (
-                <>
-                  <p className="document-title">{documentTitle}</p>
-                </>
-              )}
 
-              {currentUserType === 'editor' && !editing && (
-                <Image 
-                  src="/assets/icons/edit.svg"
-                  alt="edit"
-                  width={24}
-                  height={24}
-                  onClick={() => setEditing(true)}
-                  className="pointer"
-                />
-              )}
-
-              {currentUserType !== 'editor' && !editing && (
-                <p className="view-only-tag">View only</p>
-              )}
-
-              {loading && <p className="text-sm text-gray-400">saving...</p>}
-            </div>
-            <div className="flex w-full flex-1 justify-end gap-2 sm:gap-3">
-              <ActiveCollaborators />
-
-              <ShareModal 
-                roomId={roomId}
-                collaborators={users}
-                creatorId={roomMetadata.creatorId}
-                currentUserType={currentUserType}
-              />
-
-              <SignedOut>
-                <SignInButton />
-              </SignedOut>
-              <SignedIn>
-                <UserButton />
-              </SignedIn>
-            </div>
-          </Header>
-        <Editor roomId={roomId} currentUserType={currentUserType} />
+                <SignedOut>
+                  <SignInButton />
+                </SignedOut>
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
+              </div>
+            </Header>
+            <Editor roomId={roomId} currentUserType={currentUserType} />
+          </div>
         </div>
       </ClientSideSuspense>
     </RoomProvider>
   )
 }
 
-export default CollaborativeRoom
+export default CollaborativeRoom;
