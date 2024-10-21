@@ -121,6 +121,9 @@ const CollaborativeRoom = ({ roomId, roomMetadata, users, currentUserType }: Col
                     height={24}
                     onClick={() => setEditing(true)}
                     className="cursor-pointer"
+
+  
+
                   />
                 )}
 
