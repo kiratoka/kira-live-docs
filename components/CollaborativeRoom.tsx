@@ -94,7 +94,7 @@ const CollaborativeRoom = ({ roomId, roomMetadata, users, currentUserType }: Col
       <ClientSideSuspense fallback={<Loader />}>
         <div className={`${isDark && "dark"}`}>
           <div className="collaborative-room bg-gray-200 dark:bg-transparent">
-            <Header>
+            <Header className='bg-sky-100'>
               <div ref={containerRef} className="flex w-fit items-center justify-center gap-2">
                 {editing && !loading ? (
                   <Input
