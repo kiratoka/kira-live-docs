@@ -95,6 +95,7 @@ const CollaborativeRoom = ({ roomId, roomMetadata, users, currentUserType }: Col
         <div className={`${isDark && "dark"}`}>
           <div className="collaborative-room bg-gray-200 dark:bg-transparent">
             <Header className='bg-sky-100'>
+
               <div ref={containerRef} className="flex w-fit items-center justify-center gap-2">
                 {editing && !loading ? (
                   <Input
