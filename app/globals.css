@@ -74,7 +74,7 @@
   }
 
   .shad-popover {
-    @apply w-[460px] border-none bg-dark-200 shadow-lg !important;
+    @apply w-[460px] border-none bg-white dark:bg-dark-200 shadow-lg !important;
   }
 
   .floating-toolbar {
@@ -268,9 +268,16 @@ background-color: transparent;
   border-bottom: none;
 }
 
-.lb-comment-body,
-.lb-dropdown-item,
-.lb-dropdown-item-icon,
+
+.lb-dropdown-item-icon {
+  @apply text-white;
+}
+.lb-comment-body{
+  @apply text-black dark:text-white ;
+}
+.lb-dropdown-item{
+  @apply text-white ;
+}
 .lb-composer-editor {
 @apply text-black dark:text-white;
   
@@ -281,16 +288,25 @@ background-color: transparent;
 }
 
 .lb-comment-content {
- @apply bg-gray-300 dark:bg-dark-200;
+ @apply bg-gray-300 dark:bg-dark-200 ;
   margin-top: 16px;
   padding: 12px;
   border-radius: 4px;
   font-size: 14px;
 }
 
+.lb-composer-mention {
+@apply bg-transparent
+
+}
+
+.lb-composer-suggestions-list-item{
+  @apply text-white
+}
+
 .lb-comment-date,
 .lb-lexical-mention-suggestion-user,
-.lb-composer-suggestions-list-item,
+
 .lb-inbox-notification-date,
 .lb-comment-author,
 .lb-emoji-picker-search-icon,
